@@ -15,5 +15,6 @@
     <color name="magenta">#FF00FF</color>
 
     <color name="black">#FF000000</color>
+    <color name="semitransparent_black">#55000000</color>
 
 </resources>

@@ -5,11 +5,21 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/on_off"
+        style="@style/onOffText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:text="ON" />
+
+    <TextView
         android:id="@+id/sarcasm_text"
+        style="@style/sarcasmText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        style="@style/sarcasmText"
         android:text="@string/sarcasm_caps_locked" />
 
 </RelativeLayout>

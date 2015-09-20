@@ -7,4 +7,9 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="onOffText">
+        <item name="android:textSize">@dimen/on_off_text_dimen</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

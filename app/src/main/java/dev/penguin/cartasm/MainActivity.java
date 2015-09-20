@@ -1,10 +1,13 @@
 package dev.penguin.cartasm;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Main activity.
@@ -12,6 +15,7 @@ import android.widget.RelativeLayout;
 public class MainActivity extends Activity {
 
     private RelativeLayout mLayout;
+    private TextView mIsPlayingText;
 
     private BackgroundTimer mTimer;
     private MediaPlayer mPlayer;
@@ -35,6 +39,7 @@ public class MainActivity extends Activity {
 
         mPlayer.seekTo(mPosition);
         mPlayer.start();
+        mIsPlayingText.setText(getResources().getString(R.string.on));
     }
 
     /**
@@ -58,7 +63,31 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        mIsPlayingText = (TextView) findViewById(R.id.on_off);
         mLayout = (RelativeLayout) findViewById(R.id.root_view);
+        mLayout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                toggleMusicPlaying();
+            }
+        });
+    }
+
+    /**
+     * Toggles music playing.
+     */
+    private void toggleMusicPlaying() {
+
+        if (mPlayer.isPlaying()) {
+
+            pausePlayer();
+        } else {
+
+           resumePlayer();
+
+        }
     }
 
     @Override
@@ -73,10 +102,20 @@ public class MainActivity extends Activity {
     protected void onPause() {
 
         super.onPause();
-        mPosition = mPlayer.getCurrentPosition();
         mTimer.cancel();
 
+        pausePlayer();
+    }
+
+    /**
+     * Pauses player.
+     */
+    private void pausePlayer() {
+
+        mPosition = mPlayer.getCurrentPosition();
         mPlayer.pause();
+
+        mIsPlayingText.setText(getResources().getString(R.string.off));
     }
 
     /**

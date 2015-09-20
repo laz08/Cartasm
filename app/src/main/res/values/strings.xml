@@ -4,4 +4,6 @@
     <string name="sarcasm_caps_locked">SARCASM!</string>
     <string name="sarcasm_caps_unlocked">Sarcasm!</string>
 
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
 </resources>
