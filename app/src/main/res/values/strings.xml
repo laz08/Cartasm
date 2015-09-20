@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">Cartasm</string>
+    <string name="sarcasm_caps_locked">SARCASM!</string>
+    <string name="sarcasm_caps_unlocked">Sarcasm!</string>
+
+</resources>

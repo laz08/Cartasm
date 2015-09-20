@@ -1,0 +1,10 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar" />
+
+    <style name="sarcasmText">
+        <item name="android:textSize">@dimen/sarcasm_text_dimen</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>
