@@ -1,6 +1,7 @@
 package dev.penguin.cartasm;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -11,7 +12,10 @@ import android.widget.RelativeLayout;
 public class MainActivity extends Activity {
 
     private RelativeLayout mLayout;
+
     private BackgroundTimer mTimer;
+    private MediaPlayer mPlayer;
+    private int mPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,28 @@ public class MainActivity extends Activity {
 
         initializeView();
         initializeTimer();
+        initializePlayer();
+
+    }
+
+    /**
+     * Resumes player.
+     */
+    private void resumePlayer() {
+
+        mPlayer.seekTo(mPosition);
+        mPlayer.start();
+    }
+
+    /**
+     * Initializes player.
+     */
+    private void initializePlayer() {
+
+        mPlayer = MediaPlayer.create(MainActivity.this, R.raw.rock_over_japan_8bit);
+        mPlayer.setLooping(true);
+
+        mPlayer.start();
     }
 
     /**
@@ -40,14 +66,17 @@ public class MainActivity extends Activity {
 
         super.onResume();
         mTimer.start();
+        resumePlayer();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onPause() {
 
-        super.onSaveInstanceState(outState);
+        super.onPause();
+        mPosition = mPlayer.getCurrentPosition();
         mTimer.cancel();
-        onDestroy();
+
+        mPlayer.pause();
     }
 
     /**
@@ -58,4 +87,5 @@ public class MainActivity extends Activity {
         mTimer = new BackgroundTimer(100, 50, mLayout);
         mTimer.start();
     }
+
 }
