@@ -1,7 +1,6 @@
 package dev.penguin.cartasm;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +19,7 @@ public class MainActivity extends Activity {
     private BackgroundTimer mTimer;
     private MediaPlayer mPlayer;
     private int mPosition;
+    private boolean mIsPlaying;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,29 +29,8 @@ public class MainActivity extends Activity {
         initializeView();
         initializeTimer();
         initializePlayer();
-
     }
 
-    /**
-     * Resumes player.
-     */
-    private void resumePlayer() {
-
-        mPlayer.seekTo(mPosition);
-        mPlayer.start();
-        mIsPlayingText.setText(getResources().getString(R.string.on));
-    }
-
-    /**
-     * Initializes player.
-     */
-    private void initializePlayer() {
-
-        mPlayer = MediaPlayer.create(MainActivity.this, R.raw.rock_over_japan_8bit);
-        mPlayer.setLooping(true);
-
-        mPlayer.start();
-    }
 
     /**
      * Initializes view.
@@ -76,6 +55,27 @@ public class MainActivity extends Activity {
     }
 
     /**
+     * Initializes timer.
+     */
+    private void initializeTimer() {
+
+        mTimer = new BackgroundTimer(100, 50, mLayout);
+        mTimer.start();
+    }
+
+    /**
+     * Initializes player.
+     */
+    private void initializePlayer() {
+
+        mPlayer = MediaPlayer.create(MainActivity.this, R.raw.rock_over_japan_8bit);
+        mPlayer.setLooping(true);
+
+        mPlayer.start();
+        mIsPlaying = true;
+    }
+
+    /**
      * Toggles music playing.
      */
     private void toggleMusicPlaying() {
@@ -85,26 +85,34 @@ public class MainActivity extends Activity {
             pausePlayer();
         } else {
 
-           resumePlayer();
+            resumePlayer();
+        }
+        mIsPlaying = !mIsPlaying;
+        toggleTextView();
+    }
 
+    /**
+     * Toggles text to be shown.
+     */
+    private void toggleTextView() {
+
+        if (mIsPlaying) {
+
+            mIsPlayingText.setText(getResources().getString(R.string.on));
+        } else {
+
+            mIsPlayingText.setText(getResources().getString(R.string.off));
         }
     }
 
-    @Override
-    protected void onResume() {
 
-        super.onResume();
-        mTimer.start();
-        resumePlayer();
-    }
+    /**
+     * Resumes player.
+     */
+    private void resumePlayer() {
 
-    @Override
-    protected void onPause() {
-
-        super.onPause();
-        mTimer.cancel();
-
-        pausePlayer();
+        mPlayer.seekTo(mPosition);
+        mPlayer.start();
     }
 
     /**
@@ -114,17 +122,29 @@ public class MainActivity extends Activity {
 
         mPosition = mPlayer.getCurrentPosition();
         mPlayer.pause();
-
-        mIsPlayingText.setText(getResources().getString(R.string.off));
     }
 
-    /**
-     * Initializes timer.
-     */
-    private void initializeTimer() {
 
-        mTimer = new BackgroundTimer(100, 50, mLayout);
+    @Override
+    protected void onResume() {
+
+        super.onResume();
         mTimer.start();
+        toggleTextView();
+        if (mIsPlaying) {
+
+            resumePlayer();
+        }
     }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        mTimer.cancel();
+        mIsPlaying = mPlayer.isPlaying();
+        pausePlayer();
+    }
+
 
 }
